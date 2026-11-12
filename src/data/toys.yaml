@@ -1,0 +1,15 @@
+- name: censor-google-extension
+  description: A Chrome extension that censors scary words like j*b, *nt*rn and *mpl*ym*nt.
+  repo: https://github.com/balaji1029/censor-google-extension
+- name: lucky-finger
+  description: An Android app in Kotlin. Vibe-coded in half an hour.
+  repo: https://github.com/balaji1029/lucky-finger
+- name: some-manimations
+  description: Maths animations made with manim.
+  repo: https://github.com/balaji1029/some-manimations
+- name: type_zero
+  description: An interpreter for type-0 (unrestricted) grammars, because why not.
+  repo: https://github.com/balaji1029/type_zero
+- name: random-code-generator
+  description: Automata, formal languages and compiler front-ends — currently a very good reading list.
+  repo: https://github.com/balaji1029/random-code-generator

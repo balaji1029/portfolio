@@ -1,0 +1,22 @@
+---
+import type { Experience } from "../lib/data";
+
+interface Props {
+  entries: Experience[];
+}
+const { entries } = Astro.props;
+---
+
+<ul class="log">
+  {entries.map((e) => (
+    <li data-exp={e.id}>
+      <span class="date">{e.start}</span>{" "}
+      <span class="strong">{e.role}</span> — {e.org}, {e.location} — <span class="muted">{e.period}</span> — {e.summary}
+    </li>
+  ))}
+</ul>
+
+<style>
+  .log { list-style: none; margin: 0; padding: 0; }
+  .log li { margin: 0 0 4px; padding-left: 8ch; text-indent: -8ch; }
+</style>

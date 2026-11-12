@@ -1,0 +1,31 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../layouts/Base.astro";
+import Section from "../components/Section.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import { THREADS, type Thread } from "../lib/data";
+
+const all = await getCollection("projects");
+const groups = (Object.entries(THREADS) as [Thread, string][]).map(([key, name]) => ({
+  key,
+  name,
+  items: all.filter((p) => p.data.thread === key).sort((a, b) => a.data.order - b.data.order),
+}));
+---
+
+<Base title="projects" description="Projects by Balaji Karedla: compilers, systems, graphics, architecture & security, ML.">
+  {groups.map((g) => (
+    <Section cmd={`ls projects/${g.key}/`} id={g.key}>
+      <p class="thread"><span class="muted"># </span><span class="thread-name">{g.name}</span></p>
+      <div class="grid">
+        {g.items.map((project) => <ProjectCard project={project} />)}
+      </div>
+    </Section>
+  ))}
+</Base>
+
+<style>
+  .thread { margin: -6px 0 10px; }
+  .thread-name { color: var(--muted); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+</style>

@@ -1,0 +1,12 @@
+---
+import Base from "../layouts/Base.astro";
+import Section from "../components/Section.astro";
+import ToyList from "../components/ToyList.astro";
+import { toys } from "../lib/data";
+---
+
+<Base title="toys" description="Small, silly things Balaji Karedla built.">
+  <Section cmd="ls -F toys/">
+    <ToyList toys={toys()} detailed />
+  </Section>
+</Base>

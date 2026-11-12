@@ -1,0 +1,3 @@
+languages: [C++ (23/20/17), CUDA, C, Rust, Python, Java, Bash, x86 Assembly, Verilog]
+tools: [GDB, Valgrind, RenderDoc, perf, Make, CMake, Git, LaTeX, Flex, Bison, ChampSim, Docker]
+libraries: [OpenGL, NumPy, Pandas, PyTorch, TensorFlow]

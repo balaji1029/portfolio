@@ -1,0 +1,86 @@
+---
+import { profile } from "../lib/data";
+import { url } from "../lib/url";
+import type { ShellCtx } from "../lib/shell";
+
+const p = profile();
+// Deliberately no experience data here: Jump text lives only in the career log.
+const ctx: ShellCtx = {
+  name: p.name,
+  tagline: p.tagline,
+  now: p.now,
+  bio: p.bio,
+  github: p.github,
+  linkedin: p.linkedin,
+  routes: { "~": url("/"), projects: url("/projects"), about: url("/about"), toys: url("/toys") },
+};
+---
+
+<div class="prompt" data-ctx={JSON.stringify(ctx)}>
+  <output class="output" aria-live="polite"></output>
+  <label class="line">
+    <span class="ps1">$</span>
+    <input class="input" aria-label="terminal command" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="go" hidden />
+    <span class="cursor nojs" aria-hidden="true">▋</span>
+  </label>
+</div>
+
+<style>
+  .prompt { margin: 8px 0 0; }
+  .output { display: block; white-space: pre-wrap; }
+  .output :global(.echo) { color: var(--fg); }
+  .output :global(.res) { color: var(--muted); }
+  .line { display: flex; gap: 1ch; align-items: baseline; }
+  .input {
+    flex: 1; min-width: 0;
+    font: inherit; color: var(--fg); caret-color: var(--prompt);
+    background: transparent; border: 0; padding: 0; outline: none;
+  }
+  .input:focus-visible { outline: none; }
+  .line:focus-within { outline: 1px dashed var(--border); outline-offset: 4px; }
+</style>
+
+<script>
+  import { run, type ShellCtx } from "../lib/shell";
+
+  for (const root of document.querySelectorAll<HTMLElement>(".prompt")) {
+    const ctx: ShellCtx = JSON.parse(root.dataset.ctx ?? "{}");
+    const out = root.querySelector<HTMLElement>(".output")!;
+    const input = root.querySelector<HTMLInputElement>(".input")!;
+    root.querySelector(".nojs")?.remove();
+    input.hidden = false;
+
+    const print = (text: string, cls: string) => {
+      const div = document.createElement("div");
+      div.className = cls;
+      div.textContent = text;
+      out.append(div);
+    };
+    print("type 'help' and press enter", "res");
+
+    const history: string[] = [];
+    let pos = 0;
+
+    input.addEventListener("keydown", (ev) => {
+      if (ev.key === "Enter") {
+        const line = input.value;
+        input.value = "";
+        if (line.trim()) history.push(line);
+        pos = history.length;
+        const res = run(line, ctx);
+        if (res.clear) { out.replaceChildren(); return; }
+        print(`$ ${line}`, "echo");
+        for (const l of res.lines) print(l, "res");
+        if (res.navigate) location.href = res.navigate;
+      } else if (ev.key === "ArrowUp" && history.length) {
+        ev.preventDefault();
+        pos = Math.max(0, pos - 1);
+        input.value = history[pos];
+      } else if (ev.key === "ArrowDown" && history.length) {
+        ev.preventDefault();
+        pos = Math.min(history.length, pos + 1);
+        input.value = history[pos] ?? "";
+      }
+    });
+  }
+</script>

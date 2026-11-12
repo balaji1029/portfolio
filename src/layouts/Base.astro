@@ -1,0 +1,79 @@
+---
+import "@fontsource-variable/jetbrains-mono";
+import "../styles/global.css";
+import { url } from "../lib/url";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Balaji Karedla — compilers, systems, low-latency, graphics. CSE @ IIT Bombay." } = Astro.props;
+const pageTitle = title === "~" ? "Balaji Karedla" : `${title} · Balaji Karedla`;
+const path = Astro.url.pathname.replace(/\/+$/, "") || "/";
+const nav = [
+  { href: url("/projects"), label: "projects" },
+  { href: url("/about"), label: "about" },
+  { href: url("/toys"), label: "toys" },
+];
+const isCurrent = (href: string) => path === href.replace(/\/+$/, "");
+const github = "https://github.com/balaji1029";
+const linkedin = "https://www.linkedin.com/in/balaji-karedla/";
+const updated = new Date().toISOString().slice(0, 10);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href={url("/favicon.svg")} />
+    <script is:inline>
+      try {
+        var t = localStorage.getItem("theme");
+        if (t === "dark" || t === "light") document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <header class="site-nav">
+      <nav class="wrap" aria-label="primary">
+        <a class="home" href={url("/")}>~/balaji</a>
+        <ul>
+          {nav.map((n) => (
+            <li>
+              <a href={n.href} aria-current={isCurrent(n.href) ? "page" : undefined}>[{n.label}]</a>
+            </li>
+          ))}
+          <li><button class="theme-btn" type="button" id="theme-btn" aria-label="toggle colour theme">[theme]</button></li>
+        </ul>
+      </nav>
+    </header>
+    <main class="wrap">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="wrap">
+        <span><a href={github} rel="me">github</a> · <a href={linkedin} rel="me">linkedin</a></span>
+        <span>built with astro · updated {updated}</span>
+      </div>
+    </footer>
+    <script>
+      import { nextTheme, storeTheme, type Theme } from "../lib/theme";
+      const btn = document.getElementById("theme-btn");
+      btn?.addEventListener("click", () => {
+        const root = document.documentElement;
+        const current: Theme =
+          (root.dataset.theme as Theme | undefined) ??
+          (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+        const next = nextTheme(current);
+        root.dataset.theme = next;
+        let storage: Storage | null = null;
+        try { storage = localStorage; } catch { storage = null; }
+        storeTheme(storage, next);
+      });
+    </script>
+  </body>
+</html>

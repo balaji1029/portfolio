@@ -1,0 +1,38 @@
+---
+import { render, type CollectionEntry } from "astro:content";
+
+interface Props {
+  project: CollectionEntry<"projects">;
+  compact?: boolean;
+}
+const { project, compact = false } = Astro.props;
+const { title, period, context, tech, repo } = project.data;
+const { Content } = await render(project);
+---
+
+<article class="project-card">
+  <h3 class="title">
+    {repo ? <a href={repo}>{title}/</a> : <span class="dir">{title}/</span>}
+  </h3>
+  <p class="meta"><span class="date">{period}</span> <span class="muted">· {context}</span></p>
+  {!compact && <div class="body"><Content /></div>}
+  <p class="tags">{tech.map((t) => <span class="tag">{t}</span>)}</p>
+</article>
+
+<style>
+  .project-card {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 14px;
+    background: var(--surface);
+    overflow-wrap: anywhere;
+    display: flex;
+    flex-direction: column;
+  }
+  .title { font-size: 1em; font-weight: 600; margin: 0; color: var(--dir); }
+  .meta { margin: 2px 0 6px; font-size: 0.92em; }
+  .body :global(ul) { margin: 0 0 8px; padding-left: 1.2em; }
+  .body :global(li) { margin: 0 0 4px; }
+  .body :global(li::marker) { color: var(--muted); }
+  .tags { margin: auto 0 0; display: flex; flex-wrap: wrap; gap: 0 10px; font-size: 0.92em; }
+</style>

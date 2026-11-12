@@ -1,0 +1,15 @@
+# Newest first.
+- id: jump
+  role: Software Engineering Intern
+  org: Jump Trading
+  location: Mumbai
+  period: May–Jul 2026
+  start: "2026.05"
+  summary: low-latency systems
+- id: ta-cs101
+  role: Teaching Assistant, CS101
+  org: IIT Bombay
+  location: Mumbai
+  period: Aug–Dec 2024
+  start: "2024.08"
+  summary: ran C++ labs for 30+ freshmen — debugging, pointers, classes, memory management

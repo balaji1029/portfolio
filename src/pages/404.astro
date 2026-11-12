@@ -1,0 +1,19 @@
+---
+import Base from "../layouts/Base.astro";
+import { url } from "../lib/url";
+---
+
+<Base title="404">
+  <p class="cmd"><span class="ps1">$</span> cd <span id="missing">that-page</span></p>
+  <p>bash: cd: <span id="missing-2">that-page</span>: No such file or directory</p>
+  <p><span class="ps1">$</span> <a href={url("/")}>cd ~</a><span class="cursor" aria-hidden="true">▋</span></p>
+  <script is:inline>
+    (function () {
+      var p = location.pathname;
+      ["missing", "missing-2"].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) el.textContent = p;
+      });
+    })();
+  </script>
+</Base>

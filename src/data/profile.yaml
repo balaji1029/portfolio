@@ -1,0 +1,9 @@
+name: Balaji Karedla
+tagline: CSE @ IIT Bombay · compilers · systems · low-latency · graphics
+now: Rust borrow checker, B.Tech project
+github: https://github.com/balaji1029
+linkedin: https://www.linkedin.com/in/balaji-karedla/
+bio:
+  - I'm a computer science undergrad at IIT Bombay, with a minor in machine learning & data science.
+  - Mostly I like programs that understand other programs — I've written a compiler from the lexer up, optimisation passes over Jimple, and right now I'm digging into the Rust borrow checker for my B.Tech project.
+  - I also like systems that have to be fast, graphics that have to look right, and caches that leak secrets.

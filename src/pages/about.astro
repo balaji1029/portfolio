@@ -1,0 +1,69 @@
+---
+import Base from "../layouts/Base.astro";
+import Section from "../components/Section.astro";
+import { achievements, experience, extracurriculars, profile, skills } from "../lib/data";
+
+const p = profile();
+const a = achievements();
+const s = skills();
+const ta = experience().filter((e) => e.id !== "jump");
+const groups = [
+  { title: "scholastic", items: a.filter((x) => x.group === "scholastic") },
+  { title: "olympiads & scholarships", items: a.filter((x) => x.group === "olympiads") },
+];
+---
+
+<Base title="about" description="About Balaji Karedla: education, achievements, skills.">
+  <Section cmd="cat bio.txt">
+    {p.bio.map((line) => <p class="para">{line}</p>)}
+  </Section>
+
+  <Section cmd="cat education.txt">
+    <p class="para"><span class="strong">B.Tech., Computer Science and Engineering</span> — IIT Bombay <span class="muted">· 2023–present</span></p>
+    <p class="para">CPI <span class="date">9.62</span>/10 · Minor in Machine Learning and Data Science</p>
+  </Section>
+
+  <Section cmd="cat achievements.txt">
+    {groups.map((g) => (
+      <>
+        <p class="sub muted"># {g.title}</p>
+        <ul class="list">
+          {g.items.map((x) => <li><span class="date">{x.year}</span> {x.text}</li>)}
+        </ul>
+      </>
+    ))}
+  </Section>
+
+  <Section cmd="cat positions.txt">
+    <ul class="list">
+      {ta.map((e) => <li><span class="date">{e.period}</span> <span class="strong">{e.role}</span>, {e.org} — {e.summary}</li>)}
+    </ul>
+  </Section>
+
+  <Section cmd="cat skills.txt">
+    <dl class="skills">
+      <dt class="tag">languages</dt><dd>{s.languages.join(", ")}</dd>
+      <dt class="tag">tools</dt><dd>{s.tools.join(", ")}</dd>
+      <dt class="tag">libraries</dt><dd>{s.libraries.join(", ")}</dd>
+    </dl>
+  </Section>
+
+  <Section cmd="cat extracurriculars.txt">
+    <ul class="list">
+      {extracurriculars().map((x) => <li><span class="date">{x.year}</span> <span class="strong">{x.name}</span> — {x.text}</li>)}
+    </ul>
+  </Section>
+</Base>
+
+<style>
+  .para { margin: 0 0 6px; max-width: 75ch; }
+  .sub { margin: 10px 0 4px; }
+  .list { list-style: none; margin: 0; padding: 0; }
+  .list li { margin: 0 0 4px; padding-left: 2ch; text-indent: -2ch; }
+  .skills { display: grid; grid-template-columns: 11ch 1fr; gap: 4px 12px; margin: 0; }
+  .skills dd { margin: 0; }
+  @media (max-width: 640px) {
+    .skills { grid-template-columns: 1fr; }
+    .skills dd { margin-bottom: 6px; }
+  }
+</style>

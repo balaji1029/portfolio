@@ -1,0 +1,28 @@
+{
+  "name": "portfolio",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "build:cse": "SITE_BASE=/~balaji/ SITE_URL=https://www.cse.iitb.ac.in OUT_DIR=dist-cse astro build",
+    "check": "astro check",
+    "test": "vitest run",
+    "preview": "astro preview",
+    "verify": "node scripts/verify.mjs dist ${SITE_BASE:-/} && node scripts/verify.mjs dist-cse /~balaji/",
+    "ci": "npm run check && npm run build && npm run build:cse && npm test && npm run verify"
+  },
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "@fontsource-variable/jetbrains-mono": "^5.3.0",
+    "astro": "^5.18.2",
+    "yaml": "^2.9.1"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "@types/node": "^26.6.6",
+    "node-html-parser": "^9.0.7",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.7"
+  }
+}

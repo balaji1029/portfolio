@@ -1,0 +1,52 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../layouts/Base.astro";
+import Section from "../components/Section.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import CareerLog from "../components/CareerLog.astro";
+import ToyList from "../components/ToyList.astro";
+import Prompt from "../components/Prompt.astro";
+import { experience, profile, THREADS, toys, type Thread } from "../lib/data";
+import { url } from "../lib/url";
+
+const p = profile();
+const threadOrder = Object.keys(THREADS) as Thread[];
+const all = await getCollection("projects");
+const featured = all.filter((e) => e.data.featured).sort(
+  (a, b) => threadOrder.indexOf(a.data.thread) - threadOrder.indexOf(b.data.thread) || a.data.order - b.data.order,
+);
+---
+
+<Base title="~">
+  <Section cmd="whoami">
+    <p class="name">{p.name}</p>
+    <p class="muted line">{p.tagline}</p>
+    <p class="muted line">now: <span class="fg">{p.now}</span></p>
+  </Section>
+
+  <Section cmd="ls -l projects/ | head">
+    <div class="grid">
+      {featured.map((project) => <ProjectCard project={project} compact />)}
+    </div>
+    <p class="more"><a href={url("/projects")}>→ cd projects/</a> <span class="muted">({all.length} entries)</span></p>
+  </Section>
+
+  <Section cmd="git log --oneline career">
+    <CareerLog entries={experience()} />
+  </Section>
+
+  <Section cmd="ls toys/">
+    <ToyList toys={toys()} />
+    <p class="more"><a href={url("/toys")}>→ cd toys/</a></p>
+  </Section>
+
+  <Prompt />
+</Base>
+
+<style>
+  .name { font-size: clamp(24px, 6vw, 34px); font-weight: 700; color: var(--strong); margin: 0; line-height: 1.2; }
+  .line { margin: 2px 0 0; }
+  .fg { color: var(--fg); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+  .more { margin: 10px 0 0; }
+</style>

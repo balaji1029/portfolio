@@ -1,0 +1,30 @@
+---
+import type { Toy } from "../lib/data";
+
+interface Props {
+  toys: Toy[];
+  detailed?: boolean;
+}
+const { toys, detailed = false } = Astro.props;
+---
+
+{detailed ? (
+  <ul class="toys detailed">
+    {toys.map((t) => (
+      <li>
+        <a class="exec" href={t.repo}>{t.name}*</a>
+        <span class="muted"> — {t.description}</span>
+      </li>
+    ))}
+  </ul>
+) : (
+  <p class="toys inline">
+    {toys.map((t) => <a class="exec" href={t.repo}>{t.name}*</a>)}
+  </p>
+)}
+
+<style>
+  .toys { margin: 0; padding: 0; list-style: none; }
+  .inline { display: flex; flex-wrap: wrap; gap: 0 2ch; }
+  .detailed li { margin: 0 0 8px; }
+</style>
